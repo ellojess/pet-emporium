@@ -9,7 +9,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override')
+const methodOverride = require('method-override') 
 
 const app = express();
 
@@ -26,9 +26,13 @@ app.use(methodOverride('_method'))
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+// parse incoming request bodies in a middleware before your handlers, available under the req.body property
+// extended option allows to choose between parsing the URL-encoded data with the querystring library
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+// create a new cookie parser middleware function using the given secret and options
 app.use(cookieParser());
+// serve static files using built-in middleware in Express.js 
 app.use(express.static(path.join(__dirname, 'public')));
 
 require('./routes/index.js')(app);
