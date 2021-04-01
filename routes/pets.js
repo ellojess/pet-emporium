@@ -33,14 +33,30 @@ module.exports = (app) => {
 
   // SEARCH PET
   app.get('/search', (req, res) => {
-    term = new RegExp(req.query.term, 'i')
+    const term = new RegExp(req.query.term, 'i')
 
-    Pet.find({$or:[
-      {'name': term},
-      {'species': term}
-    ]}).exec((err, pets) => {
-      res.render('pets-index', { pets: pets });
-    })
+    const page = req.query.page || 1 
+    Pet.paginate(
+      {
+        // take existing $or query and put it as that query parameter for paginate
+        $or: [
+          {'name': term}, 
+          {'spaces': term}
+        ]
+      }, 
+      {page: page}).then((results) => {
+
+        // pass original term (not RegExp) to populate correct URL w/ string
+        res.render('pets-index', { pets: results.docs, pagesCount: results.pages, 
+                                    currentPage: page, term: req.query.term });
+      });
+
+    // Pet.find({$or:[
+    //   {'name': term},
+    //   {'species': term}
+    // ]}).exec((err, pets) => {
+    //   res.render('pets-index', { pets: pets });
+    // })
   });
 
   // EDIT PET
