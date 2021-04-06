@@ -16,6 +16,8 @@ const app = express();
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/petes-pets');
 
+// app.use(express.static(path.join(__dirname, 'public')));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
